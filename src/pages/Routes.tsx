@@ -1,5 +1,4 @@
-import { ReservationStatusPage } from './ReservationStatusPage';
-import { RoomBookingPage } from './RoomBookingPage';
+import { ReservationStatusPage, RoomBookingPage } from './index';
 import { Route, Routes as ReactRouterRoutes, Navigate } from 'react-router-dom';
 
 export const Routes = () => {
