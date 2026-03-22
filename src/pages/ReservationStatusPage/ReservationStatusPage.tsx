@@ -18,10 +18,10 @@ const TOTAL_MINUTES = (TIMELINE_END - TIMELINE_START) * 60;
  * @param time - 예: `"09:00"`, `"14:30"`
  * @returns `TIMELINE_START` 정각부터의 경과 분
  */
-function timeToMinutes(time: string): number {
+const timeToMinutes = (time: string): number => {
   const [h, m] = time.split(':').map(Number);
   return (h - TIMELINE_START) * 60 + m;
-}
+};
 
 export default function ReservationStatusPage() {
   const navigate = useNavigate();
@@ -91,12 +91,7 @@ export default function ReservationStatusPage() {
           padding: 0 24px;
         `}
       >
-        <Text
-          id="reservation-status-date-heading"
-          typography="t5"
-          fontWeight="bold"
-          color={colors.grey900}
-        >
+        <Text id="reservation-status-date-heading" typography="t5" fontWeight="bold" color={colors.grey900}>
           날짜 선택
         </Text>
         <Spacing size={16} />
