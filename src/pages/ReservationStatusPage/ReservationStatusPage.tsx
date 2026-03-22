@@ -40,16 +40,25 @@ export default function ReservationStatusPage() {
     }
   }, [locationState]);
 
-  const { data: rooms = [] } = useQuery(['rooms'], getRooms);
-  const { data: reservations = [] } = useQuery(['reservations', date], () => getReservations(date), {
+  const { data: rooms = [] } = useQuery({
+    queryKey: ['rooms'],
+    queryFn: getRooms,
+  });
+  const { data: reservations = [] } = useQuery({
+    queryKey: ['reservations', date],
+    queryFn: () => getReservations(date),
     enabled: !!date,
   });
-  const { data: myReservationList = [] } = useQuery(['myReservations'], getMyReservations);
+  const { data: myReservationList = [] } = useQuery({
+    queryKey: ['myReservations'],
+    queryFn: getMyReservations,
+  });
 
-  const cancelMutation = useMutation((id: string) => cancelReservation(id), {
+  const cancelMutation = useMutation({
+    mutationFn: cancelReservation,
     onSuccess: () => {
-      queryClient.invalidateQueries(['reservations']);
-      queryClient.invalidateQueries(['myReservations']);
+      queryClient.invalidateQueries({ queryKey: ['reservations'] });
+      queryClient.invalidateQueries({ queryKey: ['myReservations'] });
     },
   });
 
