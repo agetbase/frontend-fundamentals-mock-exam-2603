@@ -6,6 +6,7 @@ import { Top, Spacing, Border, Button, Text, ListRow } from '_tosslib/components
 import { colors } from '_tosslib/constants/colors';
 import { getRooms, getReservations, getMyReservations, cancelReservation } from 'shared/api';
 import { EQUIPMENT_LABELS, TIME_SLOTS, type EquipmentKey } from 'shared/constatns';
+import { queryKeys } from 'shared/queryKeys';
 import { format } from 'date-fns';
 
 const HOUR_LABELS = TIME_SLOTS.filter(t => t.endsWith(':00'));
@@ -41,24 +42,24 @@ export default function ReservationStatusPage() {
   }, [locationState]);
 
   const { data: rooms = [] } = useQuery({
-    queryKey: ['rooms'],
+    queryKey: queryKeys.rooms.all,
     queryFn: getRooms,
   });
   const { data: reservations = [] } = useQuery({
-    queryKey: ['reservations', date],
+    queryKey: queryKeys.reservations.byDate(date),
     queryFn: () => getReservations(date),
     enabled: !!date,
   });
   const { data: myReservationList = [] } = useQuery({
-    queryKey: ['myReservations'],
+    queryKey: queryKeys.myReservations.all,
     queryFn: getMyReservations,
   });
 
   const cancelMutation = useMutation({
     mutationFn: cancelReservation,
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['reservations'] });
-      queryClient.invalidateQueries({ queryKey: ['myReservations'] });
+      queryClient.invalidateQueries({ queryKey: queryKeys.reservations.all });
+      queryClient.invalidateQueries({ queryKey: queryKeys.myReservations.all });
     },
   });
 

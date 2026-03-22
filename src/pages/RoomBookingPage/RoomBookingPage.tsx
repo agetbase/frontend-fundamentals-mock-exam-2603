@@ -7,6 +7,7 @@ import { colors } from '_tosslib/constants/colors';
 import { getRooms, getReservations, createReservation, type CreateReservationBody } from 'shared/api';
 import axios from 'axios';
 import { EQUIPMENT_LABELS, TIME_SLOTS, type EquipmentKey } from 'shared/constatns';
+import { queryKeys } from 'shared/queryKeys';
 import { format } from 'date-fns';
 
 export default function RoomBookingPage() {
@@ -40,11 +41,11 @@ export default function RoomBookingPage() {
   }, [date, startTime, endTime, attendees, equipment, preferredFloor, setSearchParams]);
 
   const { data: rooms = [] } = useQuery({
-    queryKey: ['rooms'],
+    queryKey: queryKeys.rooms.all,
     queryFn: getRooms,
   });
   const { data: reservations = [] } = useQuery({
-    queryKey: ['reservations', date],
+    queryKey: queryKeys.reservations.byDate(date),
     queryFn: () => getReservations(date),
     enabled: !!date,
   });
@@ -52,8 +53,8 @@ export default function RoomBookingPage() {
   const createMutation = useMutation({
     mutationFn: (data: CreateReservationBody) => createReservation(data),
     onSuccess: (_data, variables) => {
-      queryClient.invalidateQueries({ queryKey: ['reservations', variables.date] });
-      queryClient.invalidateQueries({ queryKey: ['myReservations'] });
+      queryClient.invalidateQueries({ queryKey: queryKeys.reservations.byDate(variables.date) });
+      queryClient.invalidateQueries({ queryKey: queryKeys.myReservations.all });
     },
   });
 
