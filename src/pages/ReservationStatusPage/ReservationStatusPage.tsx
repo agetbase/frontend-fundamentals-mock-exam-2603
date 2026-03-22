@@ -6,19 +6,18 @@ import { Top, Spacing, Border, Button, Text, ListRow } from '_tosslib/components
 import { colors } from '_tosslib/constants/colors';
 import { getRooms, getReservations, getMyReservations, cancelReservation } from 'pages/remotes';
 import { EQUIPMENT_LABELS, TIME_SLOTS, type EquipmentKey } from 'shared/constatns';
+import { format } from 'date-fns';
 
 const HOUR_LABELS = TIME_SLOTS.filter(t => t.endsWith(':00'));
 const TIMELINE_START = 9;
 const TIMELINE_END = 20;
 const TOTAL_MINUTES = (TIMELINE_END - TIMELINE_START) * 60;
 
-function formatDate(date: Date): string {
-  const y = date.getFullYear();
-  const m = String(date.getMonth() + 1).padStart(2, '0');
-  const d = String(date.getDate()).padStart(2, '0');
-  return `${y}-${m}-${d}`;
-}
-
+/**
+ * `"HH:mm"` 문자열을 타임라인 기준 분 오프셋으로 바꿉니다. (`TIMELINE_START` 시 정각이 0분)
+ * @param time - 예: `"09:00"`, `"14:30"`
+ * @returns `TIMELINE_START` 정각부터의 경과 분
+ */
 function timeToMinutes(time: string): number {
   const [h, m] = time.split(':').map(Number);
   return (h - TIMELINE_START) * 60 + m;
@@ -28,7 +27,7 @@ export default function ReservationStatusPage() {
   const navigate = useNavigate();
   const location = useLocation();
   const queryClient = useQueryClient();
-  const [date, setDate] = useState(formatDate(new Date()));
+  const [date, setDate] = useState(format(new Date(), 'yyyy-MM-dd'));
 
   const locationState = location.state as { message?: string } | null;
   const [message, setMessage] = useState<{ type: 'success' | 'error'; text: string } | null>(
@@ -106,7 +105,7 @@ export default function ReservationStatusPage() {
           <input
             type="date"
             value={date}
-            min={formatDate(new Date())}
+            min={format(new Date(), 'yyyy-MM-dd')}
             onChange={e => setDate(e.target.value)}
             aria-label="날짜"
             css={css`

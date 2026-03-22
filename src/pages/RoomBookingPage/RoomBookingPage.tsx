@@ -7,20 +7,14 @@ import { colors } from '_tosslib/constants/colors';
 import { getRooms, getReservations, createReservation } from 'pages/remotes';
 import axios from 'axios';
 import { EQUIPMENT_LABELS, TIME_SLOTS, type EquipmentKey } from 'shared/constatns';
-
-function formatDate(date: Date): string {
-  const y = date.getFullYear();
-  const m = String(date.getMonth() + 1).padStart(2, '0');
-  const d = String(date.getDate()).padStart(2, '0');
-  return `${y}-${m}-${d}`;
-}
+import { format } from 'date-fns';
 
 export default function RoomBookingPage() {
   const navigate = useNavigate();
   const queryClient = useQueryClient();
   const [searchParams, setSearchParams] = useSearchParams();
 
-  const [date, setDate] = useState(searchParams.get('date') || formatDate(new Date()));
+  const [date, setDate] = useState(searchParams.get('date') || format(new Date(), 'yyyy-MM-dd'));
   const [startTime, setStartTime] = useState(searchParams.get('startTime') || '');
   const [endTime, setEndTime] = useState(searchParams.get('endTime') || '');
   const [attendees, setAttendees] = useState(Number(searchParams.get('attendees')) || 1);
@@ -231,7 +225,7 @@ export default function RoomBookingPage() {
           <input
             type="date"
             value={date}
-            min={formatDate(new Date())}
+            min={format(new Date(), 'yyyy-MM-dd')}
             onChange={e => {
               setDate(e.target.value);
               handleFilterChange();
