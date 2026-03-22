@@ -46,7 +46,7 @@ describe('예약 현황 페이지', () => {
     renderApp();
     await waitForPageLoad();
 
-    const dateInput = screen.getByLabelText('날짜');
+    const dateInput = screen.getByLabelText('날짜 선택');
     await userEvent.clear(dateInput);
     await userEvent.type(dateInput, '2026-03-15');
 
@@ -110,7 +110,7 @@ describe('예약 현황 페이지', () => {
     renderApp();
     await waitForPageLoad();
 
-    const dateInput = screen.getByLabelText('날짜') as HTMLInputElement;
+    const dateInput = screen.getByLabelText('날짜 선택') as HTMLInputElement;
 
     const today = new Date();
     const y = today.getFullYear();
