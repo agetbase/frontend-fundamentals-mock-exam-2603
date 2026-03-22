@@ -228,13 +228,7 @@ export default function RoomBookingPage() {
             gap: 6px;
           `}
         >
-          <Text
-            as="label"
-            htmlFor="room-booking-date"
-            typography="t7"
-            fontWeight="medium"
-            color={colors.grey600}
-          >
+          <Text as="label" htmlFor="room-booking-date" typography="t7" fontWeight="medium" color={colors.grey600}>
             날짜
           </Text>
           <input
