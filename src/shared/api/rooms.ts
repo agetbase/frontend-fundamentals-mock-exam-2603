@@ -7,7 +7,6 @@ export interface Room {
   capacity: number;
   equipment: string[];
 }
-
 export function getRooms() {
   return http.get<Room[]>('/api/rooms');
 }

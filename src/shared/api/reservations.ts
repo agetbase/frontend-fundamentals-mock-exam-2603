@@ -9,6 +9,9 @@ export interface Reservation {
   attendees: number;
   equipment: string[];
 }
+export function getReservations(date: string) {
+  return http.get<Reservation[]>(`/api/reservations?date=${date}`);
+}
 
 export interface CreateReservationBody {
   roomId: string;
@@ -18,6 +21,9 @@ export interface CreateReservationBody {
   attendees: number;
   equipment: string[];
 }
+export function createReservation(data: CreateReservationBody) {
+  return http.post<CreateReservationBody, CreateReservationResult>('/api/reservations', data);
+}
 
 export interface CreateReservationResult {
   ok: boolean;
@@ -25,23 +31,13 @@ export interface CreateReservationResult {
   code?: string;
   message?: string;
 }
-
-export interface CancelReservationResult {
-  ok: boolean;
-}
-
-export function getReservations(date: string) {
-  return http.get<Reservation[]>(`/api/reservations?date=${date}`);
-}
-
-export function createReservation(data: CreateReservationBody) {
-  return http.post<CreateReservationBody, CreateReservationResult>('/api/reservations', data);
-}
-
 export function getMyReservations() {
   return http.get<Reservation[]>('/api/my-reservations');
 }
 
+export interface CancelReservationResult {
+  ok: boolean;
+}
 export function cancelReservation(id: string) {
   return http.delete<CancelReservationResult>(`/api/reservations/${id}`);
 }
