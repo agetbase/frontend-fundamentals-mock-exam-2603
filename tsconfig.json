@@ -35,6 +35,7 @@
       "remotes/*": ["remotes/*"],
       "styles/*": ["styles/*"],
       "utils/*": ["utils/*"],
+      "shared/*": ["shared/*"],
       "hooks/*": ["hooks/*"],
       "stores/*": ["stores/*"]
     }
