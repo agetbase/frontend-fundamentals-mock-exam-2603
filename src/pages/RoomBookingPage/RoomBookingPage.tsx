@@ -6,23 +6,7 @@ import { Top, Spacing, Border, Button, Text, Select, ListRow } from '_tosslib/co
 import { colors } from '_tosslib/constants/colors';
 import { getRooms, getReservations, createReservation } from 'pages/remotes';
 import axios from 'axios';
-
-const EQUIPMENT_LABELS: Record<string, string> = {
-  tv: 'TV',
-  whiteboard: '화이트보드',
-  video: '화상장비',
-  speaker: '스피커',
-};
-
-const ALL_EQUIPMENT = ['tv', 'whiteboard', 'video', 'speaker'];
-
-const TIME_SLOTS: string[] = [];
-for (let h = 9; h <= 20; h++) {
-  TIME_SLOTS.push(`${String(h).padStart(2, '0')}:00`);
-  if (h < 20) {
-    TIME_SLOTS.push(`${String(h).padStart(2, '0')}:30`);
-  }
-}
+import { EQUIPMENT_LABELS, TIME_SLOTS, type EquipmentKey } from 'shared/constatns';
 
 function formatDate(date: Date): string {
   const y = date.getFullYear();
@@ -430,7 +414,7 @@ export default function RoomBookingPage() {
               flex-wrap: wrap;
             `}
           >
-            {ALL_EQUIPMENT.map(eq => {
+            {Object.keys(EQUIPMENT_LABELS).map(eq => {
               const selected = equipment.includes(eq);
               return (
                 <button
@@ -441,7 +425,7 @@ export default function RoomBookingPage() {
                     setEquipment(next);
                     handleFilterChange();
                   }}
-                  aria-label={EQUIPMENT_LABELS[eq]}
+                  aria-label={EQUIPMENT_LABELS[eq as EquipmentKey]}
                   aria-pressed={selected}
                   css={css`
                     padding: 8px 16px;
@@ -458,7 +442,7 @@ export default function RoomBookingPage() {
                     }
                   `}
                 >
-                  {EQUIPMENT_LABELS[eq]}
+                  {EQUIPMENT_LABELS[eq as EquipmentKey]}
                 </button>
               );
             })}
@@ -561,7 +545,7 @@ export default function RoomBookingPage() {
                             top={room.name}
                             topProps={{ typography: 't6', fontWeight: 'bold', color: colors.grey900 }}
                             bottom={`${room.floor}층 · ${room.capacity}명 · ${room.equipment
-                              .map((e: string) => EQUIPMENT_LABELS[e])
+                              .map((e: string) => EQUIPMENT_LABELS[e as EquipmentKey])
                               .join(', ')}`}
                             bottomProps={{ typography: 't7', color: colors.grey600 }}
                           />

@@ -5,21 +5,7 @@ import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { Top, Spacing, Border, Button, Text, ListRow } from '_tosslib/components';
 import { colors } from '_tosslib/constants/colors';
 import { getRooms, getReservations, getMyReservations, cancelReservation } from 'pages/remotes';
-
-const EQUIPMENT_LABELS: Record<string, string> = {
-  tv: 'TV',
-  whiteboard: '화이트보드',
-  video: '화상장비',
-  speaker: '스피커',
-};
-
-const TIME_SLOTS: string[] = [];
-for (let h = 9; h <= 20; h++) {
-  TIME_SLOTS.push(`${String(h).padStart(2, '0')}:00`);
-  if (h < 20) {
-    TIME_SLOTS.push(`${String(h).padStart(2, '0')}:30`);
-  }
-}
+import { EQUIPMENT_LABELS, TIME_SLOTS, type EquipmentKey } from 'shared/constatns';
 
 const HOUR_LABELS = TIME_SLOTS.filter(t => t.endsWith(':00'));
 const TIMELINE_START = 9;
@@ -311,7 +297,7 @@ export default function ReservationStatusPage() {
                               </div>
                               <div>{res.attendees}명</div>
                               {res.equipment.length > 0 && (
-                                <div>{res.equipment.map((e: string) => EQUIPMENT_LABELS[e]).join(', ')}</div>
+                                <div>{res.equipment.map(e => EQUIPMENT_LABELS[e as EquipmentKey]).join(', ')}</div>
                               )}
                             </div>
                           )}
@@ -429,7 +415,7 @@ export default function ReservationStatusPage() {
                         top={getRoomName(res.roomId)}
                         topProps={{ typography: 't6', fontWeight: 'bold', color: colors.grey900 }}
                         bottom={`${res.date} ${res.start}~${res.end} · ${res.attendees}명 · ${
-                          res.equipment.map((e: string) => EQUIPMENT_LABELS[e]).join(', ') || '장비 없음'
+                          res.equipment.map(e => EQUIPMENT_LABELS[e as EquipmentKey]).join(', ') || '장비 없음'
                         }`}
                         bottomProps={{ typography: 't7', color: colors.grey600 }}
                       />
