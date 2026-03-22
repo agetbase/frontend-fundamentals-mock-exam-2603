@@ -5,23 +5,23 @@ import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { Top, Spacing, Border, Button, Text, ListRow } from '_tosslib/components';
 import { colors } from '_tosslib/constants/colors';
 import { getRooms, getReservations, getMyReservations, cancelReservation } from 'shared/api';
-import { EQUIPMENT_LABELS, TIME_SLOTS, type EquipmentKey } from 'shared/constatns';
+import {
+  BOOKING_END_HOUR,
+  BOOKING_START_HOUR,
+  EQUIPMENT_LABELS,
+  TIME_SLOTS,
+  type EquipmentKey,
+} from 'shared/constatns';
 import { queryKeys } from 'shared/queryKeys';
 import { format } from 'date-fns';
 
-const HOUR_LABELS = TIME_SLOTS.filter(t => t.endsWith(':00'));
-const TIMELINE_START = 9;
-const TIMELINE_END = 20;
-const TOTAL_MINUTES = (TIMELINE_END - TIMELINE_START) * 60;
+// 타임라인 헤더·축: TIME_SLOTS, BOOKING와 동일 구간을 사용
+const TIMELINE_HOUR_LABELS = TIME_SLOTS.filter(t => t.endsWith(':00'));
+const TIMELINE_TOTAL_MINUTES = (BOOKING_END_HOUR - BOOKING_START_HOUR) * 60;
 
-/**
- * `"HH:mm"` 문자열을 타임라인 기준 분 오프셋으로 바꿉니다. (`TIMELINE_START` 시 정각이 0분)
- * @param time - 예: `"09:00"`, `"14:30"`
- * @returns `TIMELINE_START` 정각부터의 경과 분
- */
-const timeToMinutes = (time: string): number => {
-  const [h, m] = time.split(':').map(Number);
-  return (h - TIMELINE_START) * 60 + m;
+const timeToTimelineMinutes = (time: string): number => {
+  const [hour, minutes] = time.split(':').map(Number);
+  return (hour - BOOKING_START_HOUR) * 60 + minutes;
 };
 
 export default function ReservationStatusPage() {
@@ -184,8 +184,8 @@ export default function ReservationStatusPage() {
                 height: 18px;
               `}
             >
-              {HOUR_LABELS.map(t => {
-                const left = (timeToMinutes(t) / TOTAL_MINUTES) * 100;
+              {TIMELINE_HOUR_LABELS.map(t => {
+                const left = (timeToTimelineMinutes(t) / TIMELINE_TOTAL_MINUTES) * 100;
                 return (
                   <Text
                     key={t}
@@ -251,8 +251,10 @@ export default function ReservationStatusPage() {
                 >
                   {roomReservations.map(
                     (res: { id: string; start: string; end: string; attendees: number; equipment: string[] }) => {
-                      const left = (timeToMinutes(res.start) / TOTAL_MINUTES) * 100;
-                      const width = ((timeToMinutes(res.end) - timeToMinutes(res.start)) / TOTAL_MINUTES) * 100;
+                      const left = (timeToTimelineMinutes(res.start) / TIMELINE_TOTAL_MINUTES) * 100;
+                      const width =
+                        ((timeToTimelineMinutes(res.end) - timeToTimelineMinutes(res.start)) / TIMELINE_TOTAL_MINUTES) *
+                        100;
                       const isActive = activeReservation === res.id;
                       return (
                         <div
