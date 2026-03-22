@@ -91,7 +91,12 @@ export default function ReservationStatusPage() {
           padding: 0 24px;
         `}
       >
-        <Text typography="t5" fontWeight="bold" color={colors.grey900}>
+        <Text
+          id="reservation-status-date-heading"
+          typography="t5"
+          fontWeight="bold"
+          color={colors.grey900}
+        >
           날짜 선택
         </Text>
         <Spacing size={16} />
@@ -107,7 +112,7 @@ export default function ReservationStatusPage() {
             value={date}
             min={format(new Date(), 'yyyy-MM-dd')}
             onChange={e => setDate(e.target.value)}
-            aria-label="날짜"
+            aria-labelledby="reservation-status-date-heading"
             css={css`
               box-sizing: border-box;
               font-size: 16px;

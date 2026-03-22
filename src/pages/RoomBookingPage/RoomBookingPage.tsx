@@ -219,10 +219,17 @@ export default function RoomBookingPage() {
             gap: 6px;
           `}
         >
-          <Text as="label" typography="t7" fontWeight="medium" color={colors.grey600}>
+          <Text
+            as="label"
+            htmlFor="room-booking-date"
+            typography="t7"
+            fontWeight="medium"
+            color={colors.grey600}
+          >
             날짜
           </Text>
           <input
+            id="room-booking-date"
             type="date"
             value={date}
             min={format(new Date(), 'yyyy-MM-dd')}
@@ -230,7 +237,6 @@ export default function RoomBookingPage() {
               setDate(e.target.value);
               handleFilterChange();
             }}
-            aria-label="날짜"
             css={css`
               box-sizing: border-box;
               font-size: 16px;
